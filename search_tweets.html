@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %} Tweet {% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="text-center text-white">Thank You For Search The Tweet</h2>
+
+    <div class="row">
+        {% for tweet in tweets %}
+        <div class="col-md-4 tweet-card">
+            <div class="card bg-dark text-white">
+                <div class="card-body">
+                    <h5 class="card-title">{{ tweet.user }}</h5>
+                    <p class="card-text">{{ tweet.text }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-white">No tweets found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

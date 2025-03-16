@@ -1,0 +1,89 @@
+
+{% extends "layout.html" %}
+
+{% block title %} Tweet {% endblock %}
+
+{% block content %}
+
+    <h1 class=" text-center mt-4">Welcome To My Social Media Website</h1>
+
+
+    <!-- Like & Comment Buttons -->
+<div class="d-flex justify-content-between mt-2">
+    <button class="btn btn-outline-danger like-btn" data-tweet-id="{{ tweet.id }}">
+        {% if request.user in tweet.likes.all %}
+            ❤ Like (<span id="like-count-{{ tweet.id }}">{{ tweet.likes.count }}</span>)
+        {% else %}
+            🤍 Like (<span id="like-count-{{ tweet.id }}">{{ tweet.likes.count }}</span>)
+        {% endif %}
+    </button>
+    <button class="btn btn-outline-primary comment-toggle" data-tweet-id="{{ tweet.id }}">
+        💬 Comment
+    </button>
+</div>
+
+<!-- Comments Section (Hidden by Default) -->
+<div class="comments-section mt-3 p-3 bg-light rounded text-dark" id="comments-{{ tweet.id }}" style="display: none;">
+    {% for comment in comments %}
+        <div class="d-flex align-items-start mb-2 border-bottom pb-2">
+            <div class="me-2">
+                <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
+                {% if comment.photo %}
+                    <div class="mt-2">
+                        <img src="{{ comment.photo.url }}" alt="Comment Photo" class="img-fluid" style="max-width: 100px; border-radius: 5px;">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-muted">No comments yet. Be the first to comment!</p>
+    {% endfor %}
+
+    <!-- Add Comment Form -->
+    <form method="POST" action="{% url 'comment_tweet' tweet.id %}" enctype="multipart/form-data" class="mt-2">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button class="btn btn-success" type="submit">Comment</button>
+    </form>
+</div>
+
+
+
+
+
+<script>
+    $(document).ready(function() {
+        // Like button functionality
+        $(".like-btn").click(function() {
+            let tweetId = $(this).data("tweet-id");
+            let likeBtn = $(this);
+            let likeCountSpan = $("#like-count-" + tweetId);
+
+            $.ajax({
+                url: "{% url 'like_tweet' tweet.id %}", 
+                type: "GET",
+                success: function(response) {
+                    if (response.liked) {
+                        likeBtn.html(`❤ Like (<span id="like-count-${tweetId}">${response.like_count}</span>)`);
+                    } else {
+                        likeBtn.html(`🤍 Like (<span id="like-count-${tweetId}">${response.like_count}</span>)`);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                    alert("Something went wrong! Please try again.");
+                }
+            });
+        });
+
+        // Comment toggle functionality
+        $(".comment-toggle").click(function() {
+            let tweetId = $(this).data("tweet-id");
+            $("#comments-" + tweetId).toggle();
+        });
+    });
+</script>
+
+
+{% endblock %}
+

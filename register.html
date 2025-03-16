@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %} Register {% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4 bg-dark text-white" style="width: 400px; border-radius: 12px;">
+        <h2 class="text-center mb-4">Register</h2>
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                {{ form.username }}
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                {{ form.password1 }}
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                {{ form.password2 }}
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                {{ form.email }}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+        
+        <p class="text-center mt-3">
+            Already have an account? <a href="{% url 'login' %}" class="text-info">Login Here</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

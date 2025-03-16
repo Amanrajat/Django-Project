@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="login-container">
+        <h2 class="text-center mb-3">Login</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Username:</label>
+                {{ form.username }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password:</label>
+                {{ form.password }}
+            </div>
+            <button type="submit" class="btn btn-custom">LOGIN</button>
+        </form>
+        <p class="text-center mt-3">Don't have an account? <a href="{% url 'register' %}" class="register-link">Register Here</a></p>
+    </div>
+</div>
+
+<style>
+   
+    body {
+        background-color: #121212;
+    }
+    .login-container {
+        background-color: #1e1e1e;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+        color: white;
+        width: 350px;
+    }
+    .form-control {
+        background-color: #2a2a2a;
+        border: none;
+        color: white;
+    }
+    .form-control:focus {
+        background-color: #2a2a2a;
+        color: white;
+        box-shadow: none;
+        border: 1px solid #007bff;
+    }
+    .btn-custom {
+        background-color: #007bff;
+        border: none;
+        width: 100%;
+        padding: 10px;
+    }
+    .btn-custom:hover {
+        background-color: #0056b3;
+    }
+    .register-link {
+        color: #007bff;
+        text-decoration: none;
+    }
+    .register-link:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
